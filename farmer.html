@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmers Page - Farm Fresh</title>
+    <link rel="stylesheet" href="s1.css">
+    <style>
+        /* Styles for the Farmers Page */
+        .farmers-profile {
+            margin: 20px auto;
+            margin-top: 200px;
+            max-width: 800px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            margin-bottom: 285px;
+        }
+
+        .farmer-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .farmer-info img {
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .farmer-details h2 {
+            margin: 0;
+        }
+
+        .crops-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .crop-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .crop-item img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .add-crop-form {
+            margin-top: 20px;
+        }
+
+        .add-crop-form input, .add-crop-form button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .add-crop-form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .add-crop-form button:hover {
+            background-color: #218838;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-navbar">
+            <div class="logo">
+                <a href="farmer.html"><h1>KṛṣiVīra</h1></a>
+            </div>
+            <div class="location">
+                <label for="location">Your City:</label>
+                <input type="text" id="location" placeholder="Enter your city">
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search products in Your City">
+                <button>Search</button>
+            </div>
+            <div class="user-actions">
+                <a href="farmer_pro.html">Profile</a>
+                <a href="#" id="researcher-btn">Researcher</a>
+                <a href="#" id="add-crop-btn">Add crop</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="farmers-profile">
+        <div class="farmer-info">
+            <img src="farmer.png" alt="Farmer Image" width="100" height="100">
+            <div class="farmer-details">
+                <h2 id="farmer-name">RAJU</h2>
+                <p id="farmer-location">Location: AP</p>
+                <p id="farmer-experience">Experience: 10 years</p>
+            </div>
+        </div>
+
+        <h3>Crops Yielded</h3>
+        <div class="crops-list" id="crops-list">
+            <!-- Crops will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Add Crop Modal -->
+    <div id="add-crop-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-add-crop">&times;</span>
+            <h3>Add New Crop</h3>
+            <div class="add-crop-form">
+                <input type="text" id="crop-name" placeholder="Crop Name">
+                <input type="number" id="crop-quantity" placeholder="Quantity (kg)">
+                <input type="number" id="crop-sales" placeholder="Sales (₹)">
+                <input type="text" id="crop-image" placeholder="Image URL">
+                <button id="save-crop-btn">Save Crop</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Researcher Modal -->
+    <div id="researcher-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-researcher">&times;</span>
+            <h3>Researchers</h3>
+            <div class="researcher-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Researcher Name</th>
+                            <th>Crop</th>
+                            <th>Sales (₹)</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody id="researcher-table-body">
+                        <!-- Researchers will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 GROCI Store. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cropsList = document.getElementById('crops-list');
+            const addCropModal = document.getElementById('add-crop-modal');
+            const addCropBtn = document.getElementById('add-crop-btn');
+            const closeAddCrop = document.getElementById('close-add-crop');
+            const saveCropBtn = document.getElementById('save-crop-btn');
+            const researcherModal = document.getElementById('researcher-modal');
+            const researcherBtn = document.getElementById('researcher-btn');
+            const closeResearcher = document.getElementById('close-researcher');
+
+            const crops = [
+                { name: "Wheat", quantity: 500, sales: 15000, image: "wheat.png" },
+                { name: "Rice", quantity: 800, sales: 24000, image: "rice.png" },
+                { name: "Corn", quantity: 300, sales: 9000, image: "corn.png" }
+            ];
+
+            const researchers = [
+                { name: "Dr. Smith", crop: "Wheat", sales: 15000, duration: "Jan - Mar" },
+                { name: "Dr. Jane", crop: "Rice", sales: 24000, duration: "Apr - Jun" },
+                { name: "Dr. Doe", crop: "Corn", sales: 9000, duration: "Jul - Sep" }
+            ];
+
+            function renderCrops() {
+                cropsList.innerHTML = '';
+                crops.forEach(crop => {
+                    const div = document.createElement('div');
+                    div.classList.add('crop-item');
+                    div.innerHTML = `
+                        <img src="${crop.image}" alt="${crop.name}">
+                        <p>Quantity: ${crop.quantity} kg</p>
+                        <p>Sales: ₹${crop.sales}</p>
+                    `;
+                    cropsList.appendChild(div);
+                });
+            }
+
+            function renderResearchers() {
+                const researcherTableBody = document.getElementById('researcher-table-body');
+                researcherTableBody.innerHTML = '';
+                researchers.forEach(researcher => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${researcher.name}</td>
+                        <td>${researcher.crop}</td>
+                        <td>₹${researcher.sales}</td>
+                        <td>${researcher.duration}</td>
+                    `;
+                    researcherTableBody.appendChild(tr);
+                });
+            }
+
+            addCropBtn.addEventListener('click', function () {
+                addCropModal.style.display = "block";
+            });
+
+            closeAddCrop.addEventListener('click', function () {
+                addCropModal.style.display = "none";
+            });
+
+            window.addEventListener('click', function (event) {
+                if (event.target == addCropModal) {
+                    addCropModal.style.display = "none";
+                }
+            });
+
+            saveCropBtn.addEventListener('click', function () {
+                const cropName = document.getElementById('crop-name').value;
+                const cropQuantity = parseInt(document.getElementById('crop-quantity').value);
+                const cropSales = parseInt(document.getElementById('crop-sales').value);
+                const cropImage = document.getElementById('crop-image').value;
+
+                if (cropName && cropQuantity && cropSales && cropImage) {
+                    crops.push({ name: cropName, quantity: cropQuantity, sales: cropSales, image: cropImage });
+                    renderCrops();
+                    addCropModal.style.display = "none";
+                } else {
+                    alert("Please fill out all fields.");
+                }
+            });
+
+            researcherBtn.addEventListener('click', function () {
+                researcherModal.style.display = "block";
+                renderResearchers();
+            });
+
+            closeResearcher.addEventListener('click', function () {
+                researcherModal.style.display = "none";
+            });
+
+            window.addEventListener('click', function (event) {
+                if (event.target == researcherModal) {
+                    researcherModal.style.display = "none";
+                }
+            });
+
+            renderCrops();
+        });
+    </script>
+</body>
+</html>

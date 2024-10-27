@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile and Orders</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+    
+    <header>
+        <div class="top-navbar">
+            <div class="logo">
+                <a href="farmer.html"><h1>KṛṣiVīra</h1></a>
+            </div>
+            <div class="location">
+                <label for="location">Your City:</label>
+                <input type="text" id="location" placeholder="Enter your city">
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search products in Your City">
+                <button>Search</button>
+            </div>
+            <div class="user-actions">
+                <a href="#" id="profile-btn">Profile</a> 
+                <a href="#" id="cart-btn">Researcher</a> 
+                <a href="#" id="orders-btn">Add Crop</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" id="profileSection">
+        <div class="main-content">
+            <div class="profile-header">
+                <h1 id="profileFullName">K (She/Her)</h1>
+                <button class="edit-profile-btn" onclick="toggleEditForm()">Edit Profile</button>
+            </div>
+
+            <div class="profile-details">
+                <h2>Contact</h2>
+                <p id="profileContact">
+                    No registered services, you can add some on the <a href="#">settings</a> page.
+                </p>
+
+                <h2>Biography</h2>
+                <p id="profileBiography">No biography provided.</p>
+
+                <h2>Links</h2>
+                <p id="profileLinks">K hasn't added any links.</p>
+            </div>
+
+            <!-- Edit Profile Form -->
+            <div class="edit-profile-form" id="editProfileForm" style="display: none;">
+                <h2>Edit Profile</h2>
+                <form onsubmit="saveProfile(event)">
+                    <label for="profileName">Name:</label>
+                    <input type="text" id="profileName" name="profileName" value="K"><br>
+
+                    <label for="pronouns">Pronouns:</label>
+                    <input type="text" id="pronouns" name="pronouns" value="She/Her"><br>
+
+                    <label for="contact">Contact:</label>
+                    <input type="text" id="contact" name="contact"><br>
+
+                    <label for="biography">Biography:</label>
+                    <textarea id="biography" name="biography"></textarea><br>
+
+                    <label for="links">Links:</label>
+                    <input type="text" id="links" name="links"><br>
+
+                    <button type="submit">Save</button>
+                    <button type="button" onclick="toggleEditForm()">Cancel</button>
+                </form>
+            </div>
+
+            <!-- Previous Orders Button -->
+           
+        </div>
+    </div>
+
+    <script src="profile.js"></script>
+</body>
+</html>

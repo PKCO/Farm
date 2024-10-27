@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile and Orders</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+    <style>
+          /* Styles for Modal and Overlay */
+          .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+            z-index: 10;
+            margin-top: 20px;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 5;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+    </style>
+    
+    <header>
+        <div class="top-navbar">
+            <div class="logo">
+                <a href="researher.html"><h1>KṛṣiVīra</h1></a>
+            </div>
+            <div class="location">
+                <label for="location">Your City:</label>
+                <input type="text" id="location" placeholder="Enter your city">
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search products in Your City">
+                <button>Search</button>
+            </div>
+            <div class="user-actions">
+                <a href="#" id="profile-btn">Profile</a> 
+            </div>
+        </div>
+    </header>
+
+    <div class="container" id="profileSection">
+        <div class="main-content">
+            <div class="profile-header">
+                <h1 id="profileFullName">K (She/Her)</h1>
+                <button class="edit-profile-btn" onclick="toggleEditForm()">Edit Profile</button>
+            </div>
+
+            <div class="profile-details">
+                <h2>Contact</h2>
+                <p id="profileContact">
+                    No registered services, you can add some on the <a href="#">settings</a> page.
+                </p>
+
+                <h2>Biography</h2>
+                <p id="profileBiography">No biography provided.</p>
+
+                <h2>Links</h2>
+                <p id="profileLinks">K hasn't added any links.</p>
+            </div>
+
+            <!-- Edit Profile Form -->
+            <div class="edit-profile-form" id="editProfileForm" style="display: none;">
+                <h2>Edit Profile</h2>
+                <form onsubmit="saveProfile(event)">
+                    <label for="profileName">Name:</label>
+                    <input type="text" id="profileName" name="profileName" value="K"><br>
+
+                    <label for="pronouns">Pronouns:</label>
+                    <input type="text" id="pronouns" name="pronouns" value="She/Her"><br>
+
+                    <label for="contact">Contact:</label>
+                    <input type="text" id="contact" name="contact"><br>
+
+                    <label for="biography">Biography:</label>
+                    <textarea id="biography" name="biography"></textarea><br>
+
+                    <label for="links">Links:</label>
+                    <input type="text" id="links" name="links"><br>
+
+                    <button type="submit">Save</button>
+                    <button type="button" onclick="toggleEditForm()">Cancel</button>
+                </form>
+            </div>
+
+            
+            <div id="orders-modal" class="modal">
+                <h2>Your Previous Orders</h2>
+                <ul id="order-items"></ul>
+                <button id="close-orders">Close</button>
+            </div>
+        
+            <div id="modal-overlay" class="overlay"></div>
+        </div>
+    </div>
+
+    <script src="profile.js">
+        document.addEventListener("DOMContentLoaded", function () {
+            const ordersBtn = document.getElementById("orders-btn");
+            const ordersModal = document.getElementById("orders-modal");
+            const closeOrders = document.getElementById("close-orders");
+            const modalOverlay = document.getElementById("modal-overlay");
+            const orderItems = document.getElementById("order-items");
+
+            // Sample Previous Orders Data
+            const previousOrders = [
+                { name: "Product 1", price: 450.00, quantity: 2, date: "2024-10-01" },
+                { name: "Product 2", price: 300.00, quantity: 1, date: "2024-10-05" },
+                { name: "Product 3", price: 2500.00, quantity: 1, date: "2024-10-10" }
+            ];
+
+            // Function to toggle modal visibility
+            function toggleModal(modal, show) {
+                modal.classList.toggle("active", show);
+                modalOverlay.classList.toggle("active", show);
+            }
+
+            // Event listener to open Previous Orders Modal
+            ordersBtn.addEventListener("click", function () {
+                console.log("Orders button clicked");  // Debugging
+                updateOrderItems();
+                toggleModal(ordersModal, true);
+            });
+
+            // Event listener to close Previous Orders Modal
+            closeOrders.addEventListener("click", () => toggleModal(ordersModal, false));
+            modalOverlay.addEventListener("click", () => toggleModal(ordersModal, false));
+
+            // Function to update order items inside the modal
+            function updateOrderItems() {
+                orderItems.innerHTML = "";  // Clear previous items
+
+                previousOrders.forEach(order => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${order.name} - ₹${order.price.toFixed(2)} x ${order.quantity} (Ordered on: ${order.date})`;
+                    orderItems.appendChild(listItem);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
